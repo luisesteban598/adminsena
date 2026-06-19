@@ -14,6 +14,7 @@ class TrainingCenterController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+       $TrainingCenter = TrainingCenter::create($request->all());
+        return $TrainingCenter;
     }
 }

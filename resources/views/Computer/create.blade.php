@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-        <h1>Hola hijos</h1>
+        <h1>Crear Computadora</h1>
 
     <form action="{{route('computer.store')}}" method="POST" enctype="multipart/form-data">
 
@@ -14,13 +14,13 @@
     <label>
         numero:
         <br>
-        <input type="int" name="number">
+        <input type="number" name="number">
     </label>
     <br>
     <label>
         marca:
         <br>
-        <input type="text" name="brad">
+        <input type="text" name="brand">
     </label>
 
 

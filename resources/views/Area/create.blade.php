@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hola hijos</h1>
+    <h1>Crear Área</h1>
 
     <form action="{{route('area.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -21,7 +21,7 @@
 
 
 
-    <button type="submit">Enviar Formulario:</button>
+    <button type="submit">Crear Área</button>
     </form>
     
 </body>
