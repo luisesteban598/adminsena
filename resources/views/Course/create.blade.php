@@ -1,47 +1,42 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>formulario producto</h1>
+@extends ('layouts.app')
+@section('content')
 
-<form action="{{route('product.store')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('course.store')}}" method="POST" enctype="multipart/form-data">
+        @csrf 
 
-@csrf
-
-<label>
-    Nombre:
-    <br>
-    <input type="text" name="course_number">
-</label>
-<br>
-<label>
-    Descripcion:
-    <br>
-    <input type="date" name="day">
-</label>
-<br>
-<br>
-
-
- <label for="area_id">Área</label>
-
-    <select name="area_id" id="area_id" class="form-control">
-        <option value="">Seleccione un área</option>
-
-        @foreach($area as $areas)
-            <option value="{{ $areas->id }}">
-                {{ $areas->name }}
+        <label>
+            numero del curso:
+            <br>
+            <input type="number" name="course_number">
+        </label>
+        <br>
+        <label>
+            dia:
+            <br>
+            <input type="date" name="day">
+        </label>
+        <br>
+        <label for="training_center_id">id centro fromacion</label>
+        <select name="training_center_id" id="training_center_id" class="form-control">
+            <option value="">seleccione un centro de formacion</option>
+            @foreach($training_centers as $training_center)
+            <option value="{{$training_center->id}}">
+                {{$training_center->number}}
             </option>
-        @endforeach
-    </select>
+            @endforeach
+        </select>
+        <br><br>
+        <label for="area_id">id centro fromacion</label>
+        <select name="area_id" id="area_id" class="form-control">
+            <option value="">seleccione un centro de formacion</option>
+            @foreach($areas as $area)
+            <option value="{{$area->id}}">
+                {{$area->number}}
+            </option>
+            @endforeach
+        </select>
 
-<br>
-<br><br>
-<button type="submit">Ingresar Curso:</button>
-</form>
-    
-</body>
-</html>
+
+        <button type="submit">Enviar</button>
+    </form>
+@endsection
