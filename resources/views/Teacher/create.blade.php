@@ -1,8 +1,13 @@
 @extends ('layouts.app')
 @section('content')
-    <form action="{{route('teacher.store')}}" method="POST" enctype="multipart/form-data">
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h4 mb-4">Centros de formación</h2>
+                <form action="{{ route('trainingCenter.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-    @csrf
 
     <label>
         Nombre Instructor: 
@@ -42,6 +47,6 @@
         
 
 
-    <button type="submit">Enviar Formulario</button>
+     <button type="submit" class="btn btn-primary">Enviar formulario</button>
     </form>
 @endsection

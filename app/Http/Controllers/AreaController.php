@@ -7,6 +7,10 @@ use App\Models\area;
 
 class AreaController extends Controller
 {
+    public function index(){
+        $areas = area::all();
+        return view('area.index', compact('areas'));
+    }
      public function create(){
 
         return view('area.create');

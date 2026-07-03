@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    public function index()
+{
+    $courses = course::all();
+    return view('course.index', compact('courses'));
+}
     public function create(){
         $training_centers = Training_center::all();
         $areas = Area::all();

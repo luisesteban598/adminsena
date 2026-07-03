@@ -5,7 +5,16 @@ use Illuminate\Http\Request;
 use App\Models\Training_center;
 
 class TrainingCenterController extends Controller
+
 {
+       public function index(){
+
+        $trainingCenters=Training_center::all();
+
+        return view('trainingcenter.index',compact('trainingCenters'));
+
+
+    }
     public function create(){
         return view ('trainingcenter.create');
     }

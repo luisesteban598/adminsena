@@ -1,25 +1,27 @@
 @extends ('layouts.app')
 @section('content')
-<br>
-        <h1>Crear Computadora</h1>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h4 mb-4">Crear computadora</h2>
+                <form action="{{ route('computer.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
 
-    <form action="{{route('computer.store')}}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Número</label>
+                        <input type="number" name="number" class="form-control" required>
+                    </div>
 
-    @csrf
-    <label>
-        numero:
-        <br>
-        <input type="number" name="number">
-    </label>
-    <br>
-    <label>
-        marca:
-        <br>
-        <input type="text" name="brand">
-    </label>
+                    <div class="mb-3">
+                        <label class="form-label">Marca</label>
+                        <input type="text" name="brand" class="form-control" required>
+                    </div>
 
-
-
-    <button type="submit">Enviar Formulario:</button>
-    </form> 
+                    <button type="submit" class="btn btn-primary">Enviar formulario</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
