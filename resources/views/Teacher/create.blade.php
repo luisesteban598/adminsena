@@ -4,8 +4,9 @@
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h2 class="card-title h4 mb-4">Centros de formación</h2>
-                <form action="{{ route('trainingCenter.store') }}" method="POST" enctype="multipart/form-data">
+                <h2 class="card-title h4 mb-4">Crear instructor</h2>
+                <form action="{{ route('teacher.store') }}" method="POST" enctype="multipart/form-data">
+                    <a href="{{ route('teacher.index') }}" class="btn btn-secondary btn-sm">Volver</a>
                     @csrf
 
 

@@ -17,6 +17,7 @@ class Teacher extends Model
 
 
     use HasFactory;
+
     public function training_center(){
         return $this->belongsTo('App\Models\Training_center');
     }
@@ -26,6 +27,6 @@ class Teacher extends Model
     }
 
     public function courses(){
-        return $this->belongsToMany('App\Models\Course');
+        return $this->belongsToMany('App\Models\course', 'course_teachers', 'teacher_id', 'course_id');
     }
 }

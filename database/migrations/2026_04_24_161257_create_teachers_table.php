@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email');
             
             
-            $table->unsignedBigInteger('area_id')->nullable()->unique();
+            $table->unsignedBigInteger('area_id')->nullable();
 
             $table->foreign('area_id')
                 ->references('id')

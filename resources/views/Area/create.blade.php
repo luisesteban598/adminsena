@@ -6,6 +6,7 @@
             <div class="card-body">
                 <h2 class="card-title h4 mb-4">Crear área</h2>
                 <form action="{{ route('area.store') }}" method="POST" enctype="multipart/form-data">
+                    <a href="{{ route('area.index') }}" class="btn btn-secondary btn-sm">Volver</a>
                     @csrf
 
                     <div class="mb-3">

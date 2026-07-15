@@ -10,28 +10,22 @@
         <div class="navbar-collapse" id="navbarNavAdmin">
             <ul class="navbar-nav ms-auto d-flex flex-row gap-3 align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('teacher.index') }}">Teachers</a>
+                    <a class="nav-link" href="{{ route('teacher.index') }}">Instructores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/teacher/create">Crear Teacher</a>
+                    <a class="nav-link" href="{{ route('computer.index') }}">Computadores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('computer.index') }}">Computers</a>
+                    <a class="nav-link" href="{{ route('trainingCenter.index') }}">Centros de formación</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/computer/create">Crear Computer</a>
+                    <a class="nav-link" href="{{ route('course.index') }}">Cursos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('trainingCenter.index') }}">Training Centers</a>
+                    <a class="nav-link" href="{{ route('apprentice.index') }}">Aprendices</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/course/create">Course</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/apprentice/create">Apprentices</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/area/create">Area</a>
+                    <a class="nav-link" href="{{ route('area.index') }}">Áreas</a>
                 </li>
             </ul>
         </div>

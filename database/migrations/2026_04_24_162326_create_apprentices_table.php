@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->string('cell number');
+            $table->string('cell_number');
 
-            $table->unsignedBigInteger('course_id')->nullable()->unique();
+            $table->unsignedBigInteger('course_id')->nullable();
 
             $table->foreign('course_id')
                 ->references('id')
@@ -26,7 +26,7 @@ return new class extends Migration
                 ->onUpdate('set null');
             
             
-            $table->unsignedBigInteger('computer_id')->nullable()->unique();
+            $table->unsignedBigInteger('computer_id')->nullable();
 
             $table->foreign('computer_id')
                 ->references('id')

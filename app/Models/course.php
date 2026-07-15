@@ -21,15 +21,17 @@ class course extends Model
     }
 
     public function trainingCenter(){
-        return $this->belongsTo('App\Models\TrainingCenter');
+        return $this->belongsTo('App\Models\Training_center');
     }
+
+    public function teachers(){
+        return $this->belongsToMany('App\Models\teacher', 'course_teachers', 'course_id', 'teacher_id');
+    }
+
     use HasFactory;
+
     public function apprentice(){
-            return $this->hasOne('App\Models\apprentice');
-    }
-    
-   
-    public function teacher(){
-            return $this->hasOne('App\Models\teacher');
+        return $this->hasOne('App\Models\apprentice');
     }
 }
+

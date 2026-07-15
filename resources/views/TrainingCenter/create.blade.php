@@ -6,6 +6,7 @@
             <div class="card-body">
                 <h2 class="card-title h4 mb-4">Centros de formación</h2>
                 <form action="{{ route('trainingCenter.store') }}" method="POST" enctype="multipart/form-data">
+                    <a href="{{ route('trainingCenter.index') }}" class="btn btn-secondary btn-sm">Volver</a>
                     @csrf
 
                     <div class="mb-3">

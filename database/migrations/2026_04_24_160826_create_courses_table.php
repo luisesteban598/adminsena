@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('course_number');
             $table->date('day');
 
-            $table->unsignedBigInteger('area_id')->nullable()->unique();
+            $table->unsignedBigInteger('area_id')->nullable();
 
             $table->foreign('area_id')
                 ->references('id')
@@ -24,7 +24,7 @@ return new class extends Migration
                 ->onDelete('set null')
                 ->onUpdate('set null');
 
-            $table->unsignedBigInteger('training_center_id')->nullable()->unique();
+            $table->unsignedBigInteger('training_center_id')->nullable();
 
             $table->foreign('training_center_id')
                 ->references('id')

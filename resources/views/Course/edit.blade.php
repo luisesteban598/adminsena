@@ -4,21 +4,19 @@
     <div class="col-md-8">
         <div class="card shadow-sm">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="card-title h4 mb-4">Crear curso</h2>
-                    <a href="{{ route('course.index') }}" class="btn btn-secondary btn-sm">Volver</a>
-                </div>
-                <form action="{{ route('course.store') }}" method="POST" enctype="multipart/form-data">
+                <h2 class="card-title h4 mb-4">Editar curso</h2>
+                <form action="{{ route('course.update', $course) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     <div class="mb-3">
                         <label class="form-label">Número del curso</label>
-                        <input type="number" name="course_number" class="form-control" required>
+                        <input type="number" name="course_number" class="form-control" value="{{ old('course_number', $course->course_number) }}" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Día</label>
-                        <input type="date" name="day" class="form-control" required>
+                        <input type="date" name="day" class="form-control" value="{{ old('day', $course->day) }}" required>
                     </div>
 
                     <div class="mb-3">
@@ -26,7 +24,7 @@
                         <select name="training_center_id" id="training_center_id" class="form-select">
                             <option value="">Seleccione un centro de formación</option>
                             @foreach($training_centers as $training_center)
-                                <option value="{{ $training_center->id }}">{{ $training_center->name }}</option>
+                                <option value="{{ $training_center->id }}" {{ old('training_center_id', $course->training_center_id) == $training_center->id ? 'selected' : '' }}>{{ $training_center->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -36,12 +34,13 @@
                         <select name="area_id" id="area_id" class="form-select">
                             <option value="">Seleccione un área</option>
                             @foreach($areas as $area)
-                                <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                <option value="{{ $area->id }}" {{ old('area_id', $course->area_id) == $area->id ? 'selected' : '' }}>{{ $area->name }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="{{ route('course.index') }}" class="btn btn-secondary">Cancelar</a>
                 </form>
             </div>
         </div>

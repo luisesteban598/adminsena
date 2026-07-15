@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="h4 mb-0">Aprendices</h2>
-            <a href="{{ url('apprentice/create') }}" class="btn btn-primary btn-sm">Crear</a>
+            <a href="{{ route('apprentice.create') }}" class="btn btn-primary btn-sm">Crear</a>
         </div>
 
         <div class="table-responsive">
@@ -16,6 +16,7 @@
                         <th>Nombre</th>
                         <th>Correo</th>
                         <th>Teléfono</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,16 @@
                             <td>{{ $apprentice->name }}</td>
                             <td>{{ $apprentice->email }}</td>
                             <td>{{ $apprentice->cell_number }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('apprentice.edit', $apprentice) }}" class="btn btn-sm btn-warning">Editar</a>
+                                    <form action="{{ route('apprentice.destroy', $apprentice) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar aprendiz?')">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
