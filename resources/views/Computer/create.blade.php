@@ -1,28 +1,34 @@
-@extends ('layouts.app')
+@extends('layouts.dashboard')
+
+@section('title', 'Nuevo Equipo — AdminSENA')
+@section('page-title', 'Computadores')
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title h4 mb-4">Crear computadora</h2>
-                <form action="{{ route('computer.store') }}" method="POST" enctype="multipart/form-data">
-                    <a href="{{ route('computer.index') }}" class="btn btn-secondary btn-sm">Volver</a>
-                    @csrf
 
-                    <div class="mb-3">
-                        <label class="form-label">Número</label>
-                        <input type="number" name="number" class="form-control" required>
-                    </div>
+    <div class="card" style="max-width: 480px; margin: 0 auto;">
+        <h1>Registrar Equipo de Cómputo</h1>
 
-                    <div class="mb-3">
-                        <label class="form-label">Marca</label>
-                        <input type="text" name="brand" class="form-control" required>
-                    </div>
+        <form action="{{ route('computer.store') }}" method="POST">
+            @csrf
 
-                    <button type="submit" class="btn btn-primary">Enviar formulario</button>
-                </form>
+            <div class="form-group">
+                <label for="number">Número</label>
+                <input type="number" id="number" name="number" value="{{ old('number') }}" required>
+                @error('number')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="brand">Marca</label>
+                <input type="text" id="brand" name="brand" value="{{ old('brand') }}" required>
+                @error('brand')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar equipo</button>
+        </form>
     </div>
-</div>
+
 @endsection

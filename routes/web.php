@@ -4,60 +4,33 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\TrainingCenterController;
 use App\Http\Controllers\ComputerController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\ApprenticeController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
-Route::get('area/list',[AreaController::class,'index'])->name('area.index');
-Route::get('area/create',[AreaController::class,'create'])->name('area.create');
-Route::post('area/store',[AreaController::class,'store'])->name('area.store');
-Route::get('area/edit/{area}',[AreaController::class,'edit'])->name('area.edit');
-Route::put('area/update/{area}',[AreaController::class,'update'])->name('area.update');
-Route::delete('area/delete/{area}',[AreaController::class,'destroy'])->name('area.destroy');
-//
-Route::get('trainingCenter/list',[TrainingCenterController::class,'index'])->name('trainingCenter.index');
-Route::get('trainingCenter/create',[TrainingCenterController::class,'create'])->name('trainingCenter.create');
-Route::post('trainingCenter/store',[TrainingCenterController::class,'store'])->name('trainingCenter.store');
-Route::get('trainingCenter/edit/{trainingCenter}',[TrainingCenterController::class,'edit'])->name('trainingCenter.edit');
-Route::put('trainingCenter/update/{trainingCenter}',[TrainingCenterController::class,'update'])->name('trainingCenter.update');
-Route::delete('trainingCenter/delete/{trainingCenter}',[TrainingCenterController::class,'destroy'])->name('trainingCenter.destroy');
-//
-Route::get('computer/list',[ComputerController::class,'index'])->name('computer.index');
-Route::get('computer/create',[ComputerController::class,'create'])->name('computer.create');
-Route::post('computer/store',[ComputerController::class,'store'])->name('computer.store');
-Route::get('computer/edit/{computer}',[ComputerController::class,'edit'])->name('computer.edit');
-Route::put('computer/update/{computer}',[ComputerController::class,'update'])->name('computer.update');
-Route::delete('computer/delete/{computer}',[ComputerController::class,'destroy'])->name('computer.destroy');
-//
-Route::get('teacher/list',[TeacherController::class,'index'])->name('teacher.index');
-Route::get('teacher/create',[TeacherController::class,'create'])->name('teacher.create');
-Route::post('teacher/store',[TeacherController::class,'store'])->name('teacher.store');
-Route::get('teacher/edit/{teacher}',[TeacherController::class,'edit'])->name('teacher.edit');
-Route::put('teacher/update/{teacher}',[TeacherController::class,'update'])->name('teacher.update');
-Route::delete('teacher/delete/{teacher}',[TeacherController::class,'destroy'])->name('teacher.destroy');
-//
-Route::get('course/list',[CourseController::class,'index'])->name('course.index');
-Route::get('course/create',[CourseController::class,'create'])->name('course.create');
-Route::post('course/store',[CourseController::class,'store'])->name('course.store');
-Route::get('course/edit/{course}',[CourseController::class,'edit'])->name('course.edit');
-Route::put('course/update/{course}',[CourseController::class,'update'])->name('course.update');
-Route::delete('course/delete/{course}',[CourseController::class,'destroy'])->name('course.destroy');
-//
-Route::get('apprentice/list',[ApprenticeController::class,'index'])->name('apprentice.index');
-Route::get('apprentice/create',[ApprenticeController::class,'create'])->name('apprentice.create');
-Route::post('apprentice/store',[ApprenticeController::class,'store'])->name('apprentice.store');
-Route::get('apprentice/edit/{apprentice}',[ApprenticeController::class,'edit'])->name('apprentice.edit');
-Route::put('apprentice/update/{apprentice}',[ApprenticeController::class,'update'])->name('apprentice.update');
-Route::delete('apprentice/delete/{apprentice}',[ApprenticeController::class,'destroy'])->name('apprentice.destroy');
 
+// Landing pública (redirige a /dashboard si ya hay sesión iniciada)
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Autenticación
+Route::get('login', [AuthController::class, 'create'])->name('login')->middleware('guest');
+Route::post('login', [AuthController::class, 'store'])->name('login.store')->middleware('guest');
+Route::post('logout', [AuthController::class, 'destroy'])->name('logout')->middleware('auth');
 
+// Panel interno (requiere sesión iniciada)
+Route::middleware('auth')->group(function () {
+    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('area/create', [AreaController::class, 'create'])->name('area.create');
+    Route::post('area/store', [AreaController::class, 'store'])->name('area.store');
+
+    Route::get('trainingCenter/create', [TrainingCenterController::class, 'create'])->name('trainingCenter.create');
+    Route::post('trainingCenter/store', [TrainingCenterController::class, 'store'])->name('trainingCenter.store');
+
+    Route::get('computer/create', [ComputerController::class, 'create'])->name('computer.create');
+    Route::post('computer/store', [ComputerController::class, 'store'])->name('computer.store');
+});
