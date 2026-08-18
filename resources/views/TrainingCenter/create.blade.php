@@ -1,28 +1,34 @@
-@extends ('layouts.app')
+@extends('layouts.dashboard')
+
+@section('title', 'Nuevo Centro de Formación — AdminSENA')
+@section('page-title', 'Centros de Formación')
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title h4 mb-4">Centros de formación</h2>
-                <form action="{{ route('trainingCenter.store') }}" method="POST" enctype="multipart/form-data">
-                    <a href="{{ route('trainingCenter.index') }}" class="btn btn-secondary btn-sm">Volver</a>
-                    @csrf
 
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
+    <div class="card" style="max-width: 480px; margin: 0 auto;">
+        <h1>Registrar Centro de Formación</h1>
 
-                    <div class="mb-3">
-                        <label class="form-label">Ubicación</label>
-                        <input type="text" name="location" class="form-control" required>
-                    </div>
+        <form action="{{ route('trainingCenter.store') }}" method="POST">
+            @csrf
 
-                    <button type="submit" class="btn btn-primary">Enviar formulario</button>
-                </form>
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                @error('name')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="location">Ubicación</label>
+                <input type="text" id="location" name="location" value="{{ old('location') }}" required>
+                @error('location')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar centro</button>
+        </form>
     </div>
-</div>
+
 @endsection

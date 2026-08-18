@@ -1,23 +1,26 @@
-@extends ('layouts.app')
+@extends('layouts.dashboard')
+
+@section('title', 'Nueva Área — AdminSENA')
+@section('page-title', 'Áreas')
+
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title h4 mb-4">Crear área</h2>
-                <form action="{{ route('area.store') }}" method="POST" enctype="multipart/form-data">
-                    <a href="{{ route('area.index') }}" class="btn btn-secondary btn-sm">Volver</a>
-                    @csrf
 
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" name="name" class="form-control" required>
-                    </div>
+    <div class="card" style="max-width: 480px; margin: 0 auto;">
+        <h1>Registrar Área</h1>
 
-                    <button type="submit" class="btn btn-primary">Crear área</button>
-                </form>
+        <form action="{{ route('area.store') }}" method="POST">
+            @csrf
+
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                @error('name')
+                    <span class="field-error">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <button type="submit" class="btn btn-primary">Guardar área</button>
+        </form>
     </div>
-</div>
+
 @endsection
