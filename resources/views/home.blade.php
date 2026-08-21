@@ -20,19 +20,33 @@
 
         <div class="carousel landing-carousel">
             <div class="carousel-track">
-                <div class="carousel-slide has-image slide-1">
-                    <div class="slide-caption">
-                        <h3 style="font-size:1.1rem;">Centros de formación a nivel nacional</h3>
+                <!-- Slide 1: Centros de formación -->
+                <div class="carousel-slide has-image slide-1" style="position: relative; overflow: hidden;">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1200&auto=format&fit=crop" 
+                         alt="Centros de Formación SENA" 
+                         style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
+                    <div class="slide-caption" style="position: relative; z-index: 2; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px;">
+                        <h3 style="font-size:1.1rem; color: #fff; margin: 0;">Centros de formación a nivel nacional</h3>
                     </div>
                 </div>
-                <div class="carousel-slide has-image slide-2">
-                    <div class="slide-caption">
-                        <h3 style="font-size:1.1rem;">Formación para el trabajo y el desarrollo humano</h3>
+
+                <!-- Slide 2: Formación para el trabajo -->
+                <div class="carousel-slide has-image slide-2" style="position: relative; overflow: hidden;">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" 
+                         alt="Formación para el trabajo" 
+                         style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
+                    <div class="slide-caption" style="position: relative; z-index: 2; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px;">
+                        <h3 style="font-size:1.1rem; color: #fff; margin: 0;">Formación para el trabajo y el desarrollo humano</h3>
                     </div>
                 </div>
-                <div class="carousel-slide has-image slide-3">
-                    <div class="slide-caption">
-                        <h3 style="font-size:1.1rem;">Innovación y tecnología al servicio de los aprendices</h3>
+
+                <!-- Slide 3: Innovación y Tecnología -->
+                <div class="carousel-slide has-image slide-3" style="position: relative; overflow: hidden;">
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1200&auto=format&fit=crop" 
+                         alt="Innovación y tecnología SENA" 
+                         style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
+                    <div class="slide-caption" style="position: relative; z-index: 2; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px;">
+                        <h3 style="font-size:1.1rem; color: #fff; margin: 0;">Innovación y tecnología al servicio de los aprendices</h3>
                     </div>
                 </div>
             </div>

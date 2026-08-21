@@ -15,17 +15,35 @@
                 <span>ADMIN SENA</span>
             </div>
 
-            <nav class="sidebar-nav">
-                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">&#8962; Dashboard</a>
+        <nav class="sidebar-nav">
+                    <a href="{{ route('dashboard') }}" class="nav-item active">
+                        <span class="icon">&#8962;</span> Dashboard
+                    </a>
+                    
+                    <a href="{{ route('apprentice.index') }}" class="nav-item">
+                        <span class="icon">&#128101;</span> Aprendices
+                    </a>
 
-                <span class="sidebar-disabled">&#128101; Aprendices <span class="tag-soon">Próximamente</span></span>
-                <span class="sidebar-disabled">&#128218; Cursos <span class="tag-soon">Próximamente</span></span>
-                <span class="sidebar-disabled">&#128100; Instructores <span class="tag-soon">Próximamente</span></span>
+                    <a href="{{ route('course.index') }}" class="nav-item">
+                        <span class="icon">&#128218;</span> Cursos
+                    </a>
 
-                <a href="{{ route('computer.create') }}" class="{{ request()->routeIs('computer.*') ? 'active' : '' }}">&#128421; Computadores</a>
-                <a href="{{ route('trainingCenter.create') }}" class="{{ request()->routeIs('trainingCenter.*') ? 'active' : '' }}">&#127970; Centros de Formación</a>
-                <a href="{{ route('area.create') }}" class="{{ request()->routeIs('area.*') ? 'active' : '' }}">&#9638; Áreas</a>
-            </nav>
+                    <a href="{{ route('teacher.index') }}" class="nav-item">
+                        <span class="icon">&#128100;</span> Instructores
+                    </a>
+
+                    <a href="{{ route('computer.index') }}" class="nav-item">
+                        <span class="icon">&#128421;</span> Computadores
+                    </a>
+
+                    <a href="{{ route('trainingCenter.index') }}" class="nav-item">
+                        <span class="icon">&#127970;</span> Centros de Formación
+                    </a>
+
+                    <a href="{{ route('area.index') }}" class="nav-item">
+                        <span class="icon">&#9638;</span> Áreas
+                    </a>
+        </nav>
 
             <div class="sidebar-footer">
                 <form action="{{ route('logout') }}" method="POST">

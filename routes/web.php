@@ -9,6 +9,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ApprenticeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,17 +17,31 @@ use App\Http\Controllers\AuthController;
 |--------------------------------------------------------------------------
 */
 
-// Landing pública (redirige a /dashboard si ya hay sesión iniciada)
+// Landing pública / Inicio
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Autenticación
-Route::get('login', [AuthController::class, 'create'])->name('login')->middleware('guest');
-Route::post('login', [AuthController::class, 'store'])->name('login.store')->middleware('guest');
-Route::post('logout', [AuthController::class, 'destroy'])->name('logout')->middleware('auth');
+// ==========================================
+// Rutas de Autenticación (Públicas / Invitados)
+// ==========================================
+Route::middleware('guest')->group(function () {
+    // Login
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 
-// Panel interno (requiere sesión iniciada)
+    // Registro
+    Route::get('/registro', [AuthController::class, 'showRegister'])->name('registro.index');
+    Route::post('/registro', [AuthController::class, 'register'])->name('registro.store');
+});
+
+// Cerrar sesión (solo si ya inició sesión)
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// ==========================================
+// Panel Interno (Requiere Inicio de Sesión)
+// ==========================================
 Route::middleware('auth')->group(function () {
-    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Áreas
     Route::get('area/list', [AreaController::class, 'index'])->name('area.index');
@@ -75,4 +90,5 @@ Route::middleware('auth')->group(function () {
     Route::get('apprentice/edit/{apprentice}', [ApprenticeController::class, 'edit'])->name('apprentice.edit');
     Route::put('apprentice/update/{apprentice}', [ApprenticeController::class, 'update'])->name('apprentice.update');
     Route::delete('apprentice/delete/{apprentice}', [ApprenticeController::class, 'destroy'])->name('apprentice.destroy');
+
 });
