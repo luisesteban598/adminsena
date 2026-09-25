@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Ordeno primero las noticias más recientes para facilitar la administración.
         $news = News::latest()->get();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json($news);
+        }
 
         return view('News.index', compact('news'));
     }
@@ -32,13 +36,21 @@ class NewsController extends Controller
             $validated['image'] = $request->file('image')->store('news', 'public');
         }
 
-        News::create($validated);
+        $news = News::create($validated);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Noticia creada correctamente.', 'news' => $news], 201);
+        }
 
         return redirect()->route('news.index')->with('success', 'Noticia creada correctamente.');
     }
 
     public function show(News $news)
     {
+        if (request()->is('v1/*')) {
+            return response()->json($news);
+        }
+
         return view('News.show', compact('news'));
     }
 
@@ -49,11 +61,14 @@ class NewsController extends Controller
 
     public function update(Request $request, News $news)
     {
-        $validated = $this->validateNews($request);
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['published_at'] = $validated['is_published']
-            ? ($news->published_at ?? now())
-            : null;
+        $validated = $this->validateNews($request, $request->isMethod('patch'));
+        $partial = $request->isMethod('patch');
+        if (!$partial || $request->exists('is_published')) {
+            $validated['is_published'] = $request->boolean('is_published');
+            $validated['published_at'] = $validated['is_published']
+                ? ($news->published_at ?? now())
+                : null;
+        }
 
         if ($request->hasFile('image')) {
             if ($news->image) {
@@ -64,10 +79,14 @@ class NewsController extends Controller
 
         $news->update($validated);
 
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Noticia actualizada correctamente.', 'news' => $news->fresh()]);
+        }
+
         return redirect()->route('news.index')->with('success', 'Noticia actualizada correctamente.');
     }
 
-    public function destroy(News $news)
+    public function destroy(Request $request, News $news)
     {
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
@@ -75,16 +94,23 @@ class NewsController extends Controller
 
         $news->delete();
 
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Noticia eliminada correctamente.']);
+        }
+
         return redirect()->route('news.index')->with('success', 'Noticia eliminada correctamente.');
     }
 
-    private function validateNews(Request $request): array
+    private function validateNews(Request $request, bool $partial = false): array
     {
+        $required = $partial ? 'sometimes|required|' : 'required|';
+
         return $request->validate([
-            'title' => 'required|string|max:255',
-            'summary' => 'required|string|max:500',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'title' => $required.'string|max:255',
+            'summary' => $required.'string|max:500',
+            'content' => $required.'string',
+            'image' => $partial ? 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:2048' : 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_published' => $partial ? 'sometimes|boolean' : 'sometimes|boolean',
         ]);
     }
 }

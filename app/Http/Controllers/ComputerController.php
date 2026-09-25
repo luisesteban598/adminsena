@@ -12,6 +12,12 @@ class ComputerController extends Controller
          return response()->json($computers);
     }
 
+    public function show(computer $computer){
+        $computer->load('apprentice');
+
+        return response()->json($computer);
+    }
+
     // public function create(){
     //     return view('Computer.create');
     // }
@@ -43,8 +49,8 @@ class ComputerController extends Controller
 
     public function update(Request $request, computer $computer){
         $validated = $request->validate([
-            'number' => 'required|integer',
-            'brand' => 'required|string|max:255',
+            'number' => $request->isMethod('patch') ? 'sometimes|required|integer' : 'required|integer',
+            'brand' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
         ]);
 
         $computer->update($validated);

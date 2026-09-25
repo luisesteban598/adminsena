@@ -9,9 +9,14 @@ use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $teachers = Teacher::all();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json($teachers->load(['area', 'training_center', 'courses']));
+        }
+
         return view('Teacher.index', compact('teachers'));
     }
 
@@ -26,6 +31,10 @@ class TeacherController extends Controller
     public function show(Teacher $teacher){
         $teacher->load(['area', 'training_center', 'courses']);
 
+        if (request()->is('v1/*')) {
+            return response()->json($teacher);
+        }
+
         return view('Teacher.show', compact('teacher'));
     }
 
@@ -37,7 +46,11 @@ class TeacherController extends Controller
             'training_center_id' => 'nullable|exists:training_centers,id',
         ]);
 
-        Teacher::create($validated);
+        $teacher = Teacher::create($validated);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Instructor creado correctamente.', 'teacher' => $teacher], 201);
+        }
 
         return redirect()->route('teacher.index')->with('success', 'Instructor creado correctamente.');
     }
@@ -51,19 +64,27 @@ class TeacherController extends Controller
 
     public function update(Request $request, Teacher $teacher){
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'area_id' => 'nullable|exists:areas,id',
-            'training_center_id' => 'nullable|exists:training_centers,id',
+            'name' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
+            'email' => $request->isMethod('patch') ? 'sometimes|required|email|max:255' : 'required|email|max:255',
+            'area_id' => $request->isMethod('patch') ? 'sometimes|nullable|exists:areas,id' : 'nullable|exists:areas,id',
+            'training_center_id' => $request->isMethod('patch') ? 'sometimes|nullable|exists:training_centers,id' : 'nullable|exists:training_centers,id',
         ]);
 
         $teacher->update($validated);
 
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Instructor actualizado correctamente.', 'teacher' => $teacher->fresh()]);
+        }
+
         return redirect()->route('teacher.index')->with('success', 'Instructor actualizado correctamente.');
     }
 
-    public function destroy(Teacher $teacher){
+    public function destroy(Request $request, Teacher $teacher){
         $teacher->delete();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Instructor eliminado correctamente.']);
+        }
 
         return redirect()->route('teacher.index')->with('success', 'Instructor eliminado correctamente.');
     }

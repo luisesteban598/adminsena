@@ -30,8 +30,8 @@ class course extends Model
 
     use HasFactory;
 
-    public function apprentice(){
-        return $this->hasOne('App\Models\apprentice');
+    public function apprentices(){
+        return $this->hasMany('App\Models\Apprentice');
     }
 }
 

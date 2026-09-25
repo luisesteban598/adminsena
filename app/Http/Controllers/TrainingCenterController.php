@@ -7,9 +7,13 @@ use App\Models\Training_center;
 class TrainingCenterController extends Controller
 
 {
-       public function index(){
+       public function index(Request $request){
 
         $trainingCenters=Training_center::all();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json($trainingCenters->load(['course', 'teacher']));
+        }
 
         return view('TrainingCenter.index',compact('trainingCenters'));
 
@@ -23,6 +27,10 @@ class TrainingCenterController extends Controller
     public function show(Training_center $trainingCenter){
         $trainingCenter->load(['course', 'teacher']);
 
+        if (request()->is('v1/*')) {
+            return response()->json($trainingCenter);
+        }
+
         return view('TrainingCenter.show', compact('trainingCenter'));
     }
 
@@ -32,7 +40,11 @@ class TrainingCenterController extends Controller
             'location' => 'required|string|max:255',
         ]);
 
-        Training_center::create($validated);
+        $trainingCenter = Training_center::create($validated);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Centro creado correctamente.', 'training_center' => $trainingCenter], 201);
+        }
 
         return redirect()->route('trainingCenter.index')
             ->with('success', 'Centro de formación creado correctamente.');
@@ -44,18 +56,26 @@ class TrainingCenterController extends Controller
 
     public function update(Request $request, Training_center $trainingCenter){
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
+            'name' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
+            'location' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
         ]);
 
         $trainingCenter->update($validated);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Centro actualizado correctamente.', 'training_center' => $trainingCenter->fresh()]);
+        }
 
         return redirect()->route('trainingCenter.index')
             ->with('success', 'Centro de formación actualizado correctamente.');
     }
 
-    public function destroy(Training_center $trainingCenter){
+    public function destroy(Request $request, Training_center $trainingCenter){
         $trainingCenter->delete();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Centro eliminado correctamente.']);
+        }
 
         return redirect()->route('trainingCenter.index')
             ->with('success', 'Centro de formación eliminado correctamente.');

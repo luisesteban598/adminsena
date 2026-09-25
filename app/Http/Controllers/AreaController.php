@@ -20,6 +20,10 @@ class AreaController extends Controller
     public function show(area $area){
         $area->load(['courses', 'teachers']);
 
+        if (request()->is('v1/*')) {
+            return response()->json($area);
+        }
+
         return view('Area.show', compact('area'));
     }
 
@@ -28,7 +32,11 @@ class AreaController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        area::create($validated);
+        $area = area::create($validated);
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Área creada correctamente.', 'area' => $area], 201);
+        }
 
         return redirect()->route('area.index')->with('success', 'Área creada correctamente.');
     }
@@ -39,16 +47,24 @@ class AreaController extends Controller
 
     public function update(Request $request, area $area){
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
         ]);
 
         $area->update($validated);
 
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Área actualizada correctamente.', 'area' => $area->fresh()]);
+        }
+
         return redirect()->route('area.index')->with('success', 'Área actualizada correctamente.');
     }
 
-    public function destroy(area $area){
+    public function destroy(Request $request, area $area){
         $area->delete();
+
+        if ($this->isApiRequest($request)) {
+            return response()->json(['message' => 'Área eliminada correctamente.']);
+        }
 
         return redirect()->route('area.index')->with('success', 'Área eliminada correctamente.');
     }
