@@ -1,7 +1,8 @@
 <?php
-
+use App\Http\Controllers\ComputerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AreaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+
+Route::get('computers', [ComputerController::class,'index']);
+Route::post('computers', [ComputerController::class, 'store']);
+Route::get('computers/{computer}', [ComputerController::class, 'show']);
+Route::put('computers/{computer}', [ComputerController::class, 'update']);
+Route::delete('computers/{computer}', [ComputerController::class, 'destroy']);
+
+
+Route::get('areas', [AreaController::class, 'index']);
+Route::post('areas', [AreaController::class, 'store']);
+Route::get('areas/{area}', [AreaController::class, 'show']);
+Route::put('areas/{area}', [AreaController::class, 'update']);
+Route::delete('areas/{area}', [AreaController::class, 'destroy']);
+

@@ -74,14 +74,14 @@ Route::middleware('auth')->group(function () {
     Route::put('trainingCenter/update/{trainingCenter}', [TrainingCenterController::class, 'update'])->name('trainingCenter.update');
     Route::delete('trainingCenter/delete/{trainingCenter}', [TrainingCenterController::class, 'destroy'])->name('trainingCenter.destroy');
 
-    // Computadores
-    Route::get('computer/list', [ComputerController::class, 'index'])->name('computer.index');
-    Route::get('computer/create', [ComputerController::class, 'create'])->name('computer.create');
-    Route::post('computer/store', [ComputerController::class, 'store'])->name('computer.store');
-    Route::get('computer/show/{computer}', [ComputerController::class, 'show'])->name('computer.show');
-    Route::get('computer/edit/{computer}', [ComputerController::class, 'edit'])->name('computer.edit');
-    Route::put('computer/update/{computer}', [ComputerController::class, 'update'])->name('computer.update');
-    Route::delete('computer/delete/{computer}', [ComputerController::class, 'destroy'])->name('computer.destroy');
+    // // Computadores
+    // Route::get('computer/list', [ComputerController::class, 'index'])->name('computer.index');
+    // Route::get('computer/create', [ComputerController::class, 'create'])->name('computer.create');
+    // Route::post('computer/store', [ComputerController::class, 'store'])->name('computer.store');
+    // Route::get('computer/show/{computer}', [ComputerController::class, 'show'])->name('computer.show');
+    // Route::get('computer/edit/{computer}', [ComputerController::class, 'edit'])->name('computer.edit');
+    // Route::put('computer/update/{computer}', [ComputerController::class, 'update'])->name('computer.update');
+    // Route::delete('computer/delete/{computer}', [ComputerController::class, 'destroy'])->name('computer.destroy');
 
     // Instructores
     Route::get('teacher/list', [TeacherController::class, 'index'])->name('teacher.index');

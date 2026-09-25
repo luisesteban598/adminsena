@@ -9,7 +9,7 @@ class AreaController extends Controller
 {
     public function index(){
         $areas = area::all();
-        return view('Area.index', compact('areas'));
+        return response()->json($areas);
     }
 
     public function create(){

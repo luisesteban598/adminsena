@@ -9,19 +9,19 @@ class ComputerController extends Controller
 {
     public function index(){
         $computers = computer::all();
-        return view('Computer.index', compact('computers'));
+         return response()->json($computers);
     }
 
-    public function create(){
-        return view('Computer.create');
-    }
+    // public function create(){
+    //     return view('Computer.create');
+    // }
 
-    // Muestro el equipo y el aprendiz asignado, si existe.
-    public function show(computer $computer){
-        $computer->load('apprentice');
+    // // Muestro el equipo y el aprendiz asignado, si existe.
+    // public function show(computer $computer){
+    //     $computer->load('apprentice');
 
-        return view('Computer.show', compact('computer'));
-    }
+    //     return view('Computer.show', compact('computer'));
+    // }
 
     public function store (Request $request){
         $validated = $request->validate([
@@ -29,9 +29,12 @@ class ComputerController extends Controller
             'brand' => 'required|string|max:255',
         ]);
 
-        computer::create($validated);
+        $computer = computer::create($validated);
 
-        return redirect()->route('computer.index')->with('success', 'Computador creado correctamente.');
+        return response()->json([
+            'message' => 'Computador creado correctamente.',
+            'computer' => $computer,
+        ], 201);
     }
 
     public function edit(computer $computer){
@@ -46,12 +49,15 @@ class ComputerController extends Controller
 
         $computer->update($validated);
 
-        return redirect()->route('computer.index')->with('success', 'Computador actualizado correctamente.');
+        return response()->json([
+            'message' => 'Computador actualizado correctamente.',
+            'computer' => $computer->fresh(),
+        ]);
     }
 
     public function destroy(computer $computer){
         $computer->delete();
 
-        return redirect()->route('computer.index')->with('success', 'Computador eliminado correctamente.');
+        return response()->json(['message' => 'Computador eliminado correctamente.']);
     }
 }
