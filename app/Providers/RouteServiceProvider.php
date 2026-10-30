@@ -19,7 +19,14 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->ip());
         });
 
+        $this->mapWebRoutes();
         $this->mapApiRoutes();
+    }
+
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web')
+            ->group(base_path('routes/web.php'));
     }
 
     protected function mapApiRoutes()

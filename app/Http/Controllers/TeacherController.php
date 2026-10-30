@@ -28,10 +28,10 @@ class TeacherController extends Controller
     }
 
     // Muestro el instructor con su área y centro de formación.
-    public function show(Teacher $teacher){
+    public function show(Request $request, Teacher $teacher){
         $teacher->load(['area', 'training_center', 'courses']);
 
-        if (request()->is('v1/*')) {
+        if ($this->isApiRequest($request)) {
             return response()->json($teacher);
         }
 

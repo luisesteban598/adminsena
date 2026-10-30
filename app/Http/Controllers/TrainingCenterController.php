@@ -1,83 +1,103 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Training_center;
+use App\Models\Area;
+use App\Models\training_center;
+use Cloudinary\Cloudinary;
 
 class TrainingCenterController extends Controller
-
 {
-       public function index(Request $request){
+    //public function index(){
 
-        $trainingCenters=Training_center::all();
+    //$areas=Area::all();
+    //{
 
-        if ($this->isApiRequest($request)) {
-            return response()->json($trainingCenters->load(['course', 'teacher']));
-        }
+    //return view('area.index',compact('areas'));
 
-        return view('TrainingCenter.index',compact('trainingCenters'));
+    //}
+    //}
 
-
-    }
-    public function create(){
-        return view('TrainingCenter.create');
-    }
-
-    // Muestro el centro y sus relaciones principales sin exponer identificadores técnicos.
-    public function show(Training_center $trainingCenter){
-        $trainingCenter->load(['course', 'teacher']);
-
-        if (request()->is('v1/*')) {
-            return response()->json($trainingCenter);
-        }
-
-        return view('TrainingCenter.show', compact('trainingCenter'));
+    public function index()
+    {
+        $trainingCenters = training_center::all();
+        return response()->json($trainingCenters, 200);
     }
 
-    public function store (Request $request){
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:training_centers,name',
             'location' => 'required|string|max:255',
+            'imagen' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $trainingCenter = Training_center::create($validated);
+        $file = $request->file('imagen');
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Centro creado correctamente.', 'training_center' => $trainingCenter], 201);
-        }
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => config('services.cloudinary.cloud_name'),
+                'api_key' => config('services.cloudinary.api_key'),
+                'api_secret' => config('services.cloudinary.api_secret'),
+            ],
+            'url' => ['secure' => true],
+        ]);
 
-        return redirect()->route('trainingCenter.index')
-            ->with('success', 'Centro de formación creado correctamente.');
+        $resultado = $cloudinary->uploadApi()->upload(
+            $file->getRealPath(),
+            [
+                'folder' => 'training_centers',
+                'resource_type' => 'image',
+            ]
+        );
+
+        $trainingCenter = training_center::create([
+            'name' => $request->name,
+            'location' => $request->location,
+            'imagen_url' => $resultado['secure_url'],
+            'imagen_public_id' => $resultado['public_id'],
+        ]);
+
+        return response()->json([
+            'message' => 'Centro de entrenamiento creado correctamente',
+            'data' => $trainingCenter,
+        ], 201);
     }
 
-    public function edit(Training_center $trainingCenter){
-        return view('TrainingCenter.edit', compact('trainingCenter'));
+    public function show (int $id)
+    {
+     $trainingCenter = training_center::findOrFail($id);
+       return response()->json($trainingCenter, 200);
+
     }
 
-    public function update(Request $request, Training_center $trainingCenter){
+    public function update(Request $request, int $id)
+    {
+        $trainingCenter = training_center::findOrFail($id);
+
         $validated = $request->validate([
-            'name' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
-            'location' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:training_centers,name,' . $trainingCenter->id,
+            'location' => 'required|string|max:255',
         ]);
 
         $trainingCenter->update($validated);
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Centro actualizado correctamente.', 'training_center' => $trainingCenter->fresh()]);
-        }
+        return response()->json([
+            'message' => 'Centro de entrenamiento actualizado correctamente',
+            'trainingCenter' => $trainingCenter
+        ], 200);
+      }
 
-        return redirect()->route('trainingCenter.index')
-            ->with('success', 'Centro de formación actualizado correctamente.');
-    }
 
-    public function destroy(Request $request, Training_center $trainingCenter){
+    public function destroy(int $id)
+    {
+        $trainingCenter = training_center::findOrFail($id);
         $trainingCenter->delete();
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Centro eliminado correctamente.']);
-        }
-
-        return redirect()->route('trainingCenter.index')
-            ->with('success', 'Centro de formación eliminado correctamente.');
+        return response()->json([
+            'message' => 'Centro de entrenamiento eliminado correctamente'
+        ], 200);
     }
 }

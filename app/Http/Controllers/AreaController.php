@@ -3,69 +3,97 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\area;
+use App\Models\Area;
+use Cloudinary\Cloudinary;
 
 class AreaController extends Controller
 {
-    public function index(){
-        $areas = area::all();
-        return response()->json($areas);
+    //public function index(){
+
+    //$areas=Area::all();
+    //{
+
+    //return view('area.index',compact('areas'));
+
+    //}
+    //}
+
+    public function index()
+    {
+        $areas = Area::all();
+        return response()->json($areas, 200);
     }
 
-    public function create(){
-        return view('Area.create');
-    }
 
-    // Muestro la información del área y sus relaciones sin permitir modificaciones.
-    public function show(area $area){
-        $area->load(['courses', 'teachers']);
-
-        if (request()->is('v1/*')) {
-            return response()->json($area);
-        }
-
-        return view('Area.show', compact('area'));
-    }
-
-    public function store(Request $request){
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:areas,name',
+            'imagen' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $area = area::create($validated);
+        $file = $request->file('imagen');
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Área creada correctamente.', 'area' => $area], 201);
-        }
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => config('services.cloudinary.cloud_name'),
+                'api_key' => config('services.cloudinary.api_key'),
+                'api_secret' => config('services.cloudinary.api_secret'),
+            ],
+            'url' => ['secure' => true],
+        ]);
 
-        return redirect()->route('area.index')->with('success', 'Área creada correctamente.');
+        $resultado = $cloudinary->uploadApi()->upload(
+            $file->getRealPath(),
+            [
+                'folder' => 'areas',
+                'resource_type' => 'image',
+            ]
+        );
+
+        $area = Area::create([
+            'name' => $request->name,
+            'imagen_url' => $resultado['secure_url'],
+            'imagen_public_id' => $resultado['public_id'],
+        ]);
+
+        return response()->json([
+            'message' => 'Área creada correctamente',
+            'data' => $area,
+        ], 201);
     }
 
-    public function edit(area $area){
-        return view('Area.edit', compact('area'));
+    public function show (int $id)
+    {
+     $area = Area::findOrFail($id);
+       return response()->json($area, 200);
+
     }
 
-    public function update(Request $request, area $area){
+    public function update(Request $request, int $id)
+    {
+        $area = Area::findOrFail($id);
+
         $validated = $request->validate([
-            'name' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:areas,name,' . $area->id,
         ]);
 
         $area->update($validated);
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Área actualizada correctamente.', 'area' => $area->fresh()]);
-        }
+        return response()->json([
+            'message' => 'Área actualizada correctamente',
+            'area' => $area
+        ], 200);
+      }
 
-        return redirect()->route('area.index')->with('success', 'Área actualizada correctamente.');
-    }
 
-    public function destroy(Request $request, area $area){
+    public function destroy(int $id)
+    {
+        $area = Area::findOrFail($id);
         $area->delete();
 
-        if ($this->isApiRequest($request)) {
-            return response()->json(['message' => 'Área eliminada correctamente.']);
-        }
-
-        return redirect()->route('area.index')->with('success', 'Área eliminada correctamente.');
+        return response()->json([
+            'message' => 'Área eliminada correctamente'
+        ], 200);
     }
 }

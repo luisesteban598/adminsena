@@ -11,6 +11,8 @@ class area extends Model
         
        protected $fillable = [
         'name',
+         'imagen_url',
+        'imagen_public_id',
         
     ];
     use HasFactory;

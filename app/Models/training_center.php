@@ -10,6 +10,8 @@ class training_center extends Model
           protected $fillable = [
         'name',
         'location',
+        'imagen_url',
+        'imagen_public_id',
     ];
     use HasFactory;
     public function course(){

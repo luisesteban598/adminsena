@@ -27,11 +27,10 @@ class CourseController extends Controller
         return view('Course.create', compact('training_centers','areas'));
     }
 
-    // Muestro el curso con el área, centro e instructores asociados.
-    public function show(course $course){
+    public function show(Request $request, course $course){
         $course->load(['area', 'trainingCenter', 'teachers', 'apprentices']);
 
-        if (request()->is('v1/*')) {
+        if ($this->isApiRequest($request)) {
             return response()->json($course);
         }
 
@@ -40,7 +39,7 @@ class CourseController extends Controller
 
     public function store(Request $request){
         $validated = $request->validate([
-            'course_number' => 'required|integer',
+            'course_number' => 'required|string|max:255',
             'day' => 'required|date',
             'training_center_id' => 'nullable|exists:training_centers,id',
             'area_id' => 'nullable|exists:areas,id',
@@ -66,7 +65,7 @@ class CourseController extends Controller
 
     public function update(Request $request, course $course){
         $validated = $request->validate([
-            'course_number' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|integer',
+            'course_number' => $request->isMethod('patch') ? 'sometimes|required|string|max:255' : 'required|string|max:255',
             'day' => $request->isMethod('patch') ? 'sometimes|required|date' : 'required|date',
             'training_center_id' => $request->isMethod('patch') ? 'sometimes|nullable|exists:training_centers,id' : 'nullable|exists:training_centers,id',
             'area_id' => $request->isMethod('patch') ? 'sometimes|nullable|exists:areas,id' : 'nullable|exists:areas,id',
